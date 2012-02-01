@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+ <head>
+  <title>Voting!</title>
+  <script src="jquery-1.5.1.min.js"></script>
+  <script src="jquery-ui-1.8.14.custom.min.js"></script>
+  <script>
+
+$(function() {
+  $("ul").sortable({
+    connectWith: "ul",
+    placeholder: "placeholder"
+  });
+  $("ul").disableSelection();
+});
+  </script>
+  <style>
+ul {
+  list-style-type: none;
+  padding: 20px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  background: #eee;
+  line-height: 40px;
+}
+ul li.ui-sortable-helper {
+  line-height: 18px;
+}
+ul li {
+  cursor: move;
+  display: inline;
+  margin-right: 5px;
+  padding: 5px;
+  width: 120px;
+  border: 1px solid #6699ff;
+  border-radius: 5px;
+  background: #e0ebff;
+  color: #141f33;
+}
+ul li.placeholder {
+/*
+  border: 1px solid #d3d3d3;
+  background: #e6e6e6;
+  color: #555555;
+*/
+  display: none;
+}
+  </style>
+ </head>
+
+<body>
+
+<h1>PKN Preference Voting</h1>
+
+<form action="submit.php" method="post">
+
+<div style="background-color: #ffbfbf; padding: 10px; border: 1px solid #ff8f8f; border-radius: 15px;">
+Email (for security): 
+<input type="text" name="email" />
+</div>
+
+<p><i>Drag the people into the bins to vote. You can pick many people for each bin.</i></p>
+
+<p><b><a target="_blank" href="http://pknraleigh.com/talent/admin-5071881990/talents/">View Submissions Here</a></b></p>
+
+<h2>Love It!</h2>
+<ul id="primary">
+</ul>
+
+<h2>Like it</h2>
+<ul id="secondary">
+ <li id="A">Morgan&nbsp;Siem</li>
+ <li id="B">Chris&nbsp;Marlow</li>
+ <li id="C">George&nbsp;Smart</li>
+ <li id="D">Sidd&nbsp;Chopra</li>
+ <li id="E">Glyn&nbsp;Tomkins</li>
+ <li id="F">David&nbsp;Williams</li>
+ <li id="G">Megan&nbsp;Mitzel</li>
+ <li id="H">Amber&nbsp;Smith</li>
+ <li id="I">Scott&nbsp;Misner</li>
+ <li id="J">Geoffrey&nbsp;Neal</li>
+ <li id="K">Christine&nbsp;Fawley</li>
+ <li id="L">Cris&nbsp;Cohen</li>
+ <li id="M">John&nbsp;Smith</li>
+ <li id="N">Adam&nbsp;Good</li>
+ <li id="O">Beth&nbsp;Yerxa</li>
+ <li id="P">Niti&nbsp;Agarwal</li>
+ <li id="Q">Kristen&nbsp;Gallagher</li>
+ <li id="R">Kim&nbsp;Curry&#8209;Evans</li>
+ <li id="S">Todd&nbsp;Spiering</li>
+ <li id="T">Kristen&nbsp;Jeffers</li>
+ <li id="U">Justin Goeres</li> 
+ <li id="V">Todd Delk</li>
+ <li id="W">Kevin Flanagan</li>
+</ul>
+
+<h2>Indifferent</h2>
+<ul id="tertiary">
+</ul>
+
+ <input type="hidden" name="primary" value="" />
+ <input type="hidden" name="secondary" value="" />
+ <input type="hidden" name="tertiary" value="" />
+ <script>
+function serialize() {
+ $('input[name=primary]').val($('#primary').sortable('toArray').toString().replace(/,/g,''));
+ $('input[name=secondary]').val($('#secondary').sortable('toArray').toString().replace(/,/g,''));
+ $('input[name=tertiary]').val($('#tertiary').sortable('toArray').toString().replace(/,/g,''));
+}
+ </script>
+ <center>
+   <input type="submit" style="padding: 20px; width: 90%; font-size: xx-large" onclick="serialize()" />
+ </center>
+</form>
+
+</body>
+
+</html>
