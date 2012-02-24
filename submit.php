@@ -1,8 +1,8 @@
 <font size="7"><i><?php
 
-$link = mysqli_connect('mysql.philihp.com','philihp_misc','philihp_misc1','philihp_misc');
+$link = mysqli_connect('localhost','philihp','philihp1','philihp');
 
-$stmt = mysqli_prepare($link, 'INSERT INTO `pkn_votes` (`email`,`ip`,`primary`,`secondary`,`tertiary`) VALUES (?,?,?,?,?)');
+$stmt = mysqli_prepare($link, 'INSERT INTO `pkn10_votes` (`email`,`ip`,`primary`,`secondary`,`tertiary`) VALUES (?,?,?,?,?)');
 
 mysqli_stmt_bind_param($stmt,"sssss",
    $_POST['email'],
@@ -25,5 +25,4 @@ mysqli_close($link);
 
 ?></i></font>
 <br /><br />
-gooey details:
-<pre><?php print_r($_POST);?></pre>
+Thanks for your support of PechaKucha Night Raleigh.

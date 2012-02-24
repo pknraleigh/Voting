@@ -53,29 +53,22 @@ tr.ignored td {
 
 function idToName($id) {
   switch($id) {
-    case 'A' : return 'Morgan Siem';
-    case 'B' : return 'Chris Marlow';
-    case 'C' : return "George Smart"; 
-    case 'D' : return "Sidd Chopra"; 
-    case 'E' : return "Glyn Tomkins"; 
-    case 'F' : return "David Williams"; 
-    case 'G' : return "Megan Mitzel"; 
-    case 'H' : return "Amber Smith"; 
-    case 'I' : return "Scott Misner"; 
-    case 'J' : return "Geoffrey Neal"; 
-    case 'K' : return "Christine Fawley"; 
-    case 'L' : return "Cris Cohen"; 
-    case 'M' : return "John Smith"; 
-    case 'N' : return "Adam Good"; 
-    case 'O' : return "Beth Yerxa"; 
-    case 'P' : return "Niti Agarwal"; 
-    case 'Q' : return "Kristen Gallagher"; 
-    case 'R' : return "Kim Curry-Evans"; 
-    case 'S' : return "Todd Spiering"; 
-    case 'T' : return "Kristen Jeffers"; 
-    case 'U' : return "Justin Goeres"; 
-    case 'V' : return "Todd Delk"; 
-    case 'W' : return "Kevin Flanagan"; 
+    case 'A'  : return 'Sai';
+    case 'B'  : return 'Art Mealer';
+    case 'C'  : return 'Beth Palmer';
+    case 'D'  : return 'Claudine Caro';
+    case 'E'  : return 'Daniel Rothra';
+    case 'F'  : return 'Leslie Flowers';
+    case 'G'  : return 'George Smart';
+    case 'H'  : return 'Shana Garr';
+    case 'I'  : return 'John Gordon';
+    case 'J'  : return 'Karen Jasmine';
+    case 'K'  : return 'Lee Anne McClymont';
+    case 'L'  : return 'Mital Patel';
+    case 'M'  : return 'Kent Meiswinkel';
+    case 'N'  : return 'Donald McMillan';
+    case 'O'  : return 'Robert Mooney';
+    case 'P'  : return 'Crash Gregg';
     default  : return 'ERROR';
   }
 } 
@@ -99,9 +92,9 @@ function process($votes,$pri,$sec,$ter) {
 }
 
 
-$link = mysqli_connect('mysql.philihp.com','philihp_misc','philihp_misc1','philihp_misc');
+$link = mysqli_connect('localhost','philihp','philihp1','philihp');
 
-$result = mysqli_query($link,"SELECT * FROM `pkn_votes` ORDER BY email, time");
+$result = mysqli_query($link,"SELECT * FROM `pkn10_votes` ORDER BY email, time");
 
 echo "<h2>Actual Votes</h2>";
 echo "<table border=1 cellspacing=0 cellpadding=3>";
@@ -137,14 +130,14 @@ mysqli_close($link);
 echo "<h2>Pairwise Defeat Matrix</h2>";
 echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\"><thead><tr>";
 echo "<th>D</th>";
-for($c='A';$c<='W';$c++) {
+for($c='A';$c<='P';$c++) {
   echo "<th>[*,{$c}]</th>";
 }
 echo "</tr></thead>";
 echo "<tbody>";
-for($c='A';$c<='W';$c++) {
+for($c='A';$c<='P';$c++) {
   echo "<tr><th>[{$c},*]</th>";
-  for($d='A';$d<='W';$d++) {
+  for($d='A';$d<='P';$d++) {
     if($c==$d) $votes[$c][$d]=0;
     echo "<td class=\"str",$votes[$c][$d],"\">",$votes[$c][$d],"</td>";
   }
@@ -152,8 +145,8 @@ for($c='A';$c<='W';$c++) {
 }
 echo "</tbody></table>";
 
-for($i='A';$i<='W';$i++) {
-  for($j='A';$j<='W';$j++) {
+for($i='A';$i<='P';$i++) {
+  for($j='A';$j<='P';$j++) {
     if($i!=$j) {
       $strength[$i][$j] = $votes[$i][$j];
     }
@@ -162,10 +155,10 @@ for($i='A';$i<='W';$i++) {
     }
   }
 }
-for($i='A';$i<='W';$i++) {
-  for($j='A';$j<='W';$j++) {
+for($i='A';$i<='P';$i++) {
+  for($j='A';$j<='P';$j++) {
     if($i!=$j) {
-      for($k='A';$k<='W';$k++) {
+      for($k='A';$k<='P';$k++) {
         if($i!=$k & $j!=$k) {
           $strength[$j][$k] = max($strength[$j][$k], min($strength[$j][$i],$strength[$i][$k]));
         }
@@ -177,13 +170,13 @@ for($i='A';$i<='W';$i++) {
 echo "<h2>Strengths of strongest paths</h2>";
 echo "<table border=1 cellspacing=0 cellpadding=3><thead><tr>";
 echo "<th>P</th>";
-for($c='A';$c<='W';$c++) {
+for($c='A';$c<='P';$c++) {
   echo "<th>[*,{$c}]</th>";
 }
 echo "</tr></thead><tbody>";
-for($c='A';$c<='W';$c++) {
+for($c='A';$c<='P';$c++) {
   echo "<tr><th>[{$c},*]</th>";
-  for($d='A';$d<='W';$d++) {
+  for($d='A';$d<='P';$d++) {
     echo "<td class=\"str",$strength[$c][$d],"\">",$strength[$c][$d],"</td>";
   }
   echo "</tr>";
@@ -193,7 +186,7 @@ echo "</table>";
 echo "<h2>Ranking of Winners from Most Preferential to Least</h2>";
 # calculation of the binary relation O and the winners
 
-for($i='A';$i<='W';$i++) {
+for($i='A';$i<='P';$i++) {
   $possible[$i] = 1;
 }  
 
@@ -203,10 +196,10 @@ echo "<ol>";
 do {
   echo "<li>";
   $rank[++$rank_i] = '';
-  for($i='A';$i<='W';$i++) {
+  for($i='A';$i<='P';$i++) {
     if($possible[$i] == 0) continue;
     $winner = 1;
-    for($j='A';$j<='W';$j++) {
+    for($j='A';$j<='P';$j++) {
       if($possible[$j] == 0) continue;
       if($i!=$j) {
         if($strength[$j][$i] > $strength[$i][$j]) {
@@ -222,7 +215,7 @@ do {
   }
 
   $done = true;
-  for($i='A';$i<='W';$i++) {
+  for($i='A';$i<='P';$i++) {
     if($possible[$i] == 1) $done = false;
   }
   echo "</li>";
