@@ -1,28 +1,55 @@
-<font size="7"><i><?php
+<?php
 
-$link = mysqli_connect('localhost','philihp','philihp1','philihp');
+require 'config.inc.php';
 
-$stmt = mysqli_prepare($link, 'INSERT INTO `pkn10_votes` (`email`,`ip`,`primary`,`secondary`,`tertiary`) VALUES (?,?,?,?,?)');
+header('Content-Type: applicaiton/json');
 
-mysqli_stmt_bind_param($stmt,"sssss",
-   $_POST['email'],
-   $_SERVER['REMOTE_ADDR'],
-   $_POST['primary'],
-   $_POST['secondary'],
-   $_POST['tertiary']);
+$data = $_POST;
 
-mysqli_stmt_execute($stmt);
+$email = $data['email'];
+$primary = $data['primary'];
+$secondary = $data['secondary'];
+$tertiary = $data['tertiary'];
 
-if(mysqli_stmt_affected_rows($stmt)) {
-  echo "Your vote has been cast.";
+$db = db();
+
+checkForVote($data['email'], $db);
+
+$stmt = $db->prepare('INSERT INTO `votes` (`email`,`primary`,`secondary`,`tertiary`)
+                      VALUES (:email, :primary, :secondary, :tertiary)');
+$stmt->execute(array(
+  'email' => $email,
+  'primary' => $primary,
+  'secondary' => $secondary,
+  'tertiary' => $tertiary
+));
+
+$status = ($stmt->rowCount() > 0)? 1 : 0;
+
+if ($status === 1) {
+  echo json_encode(array('status' => '1', 'message' => 'Your vote has been cast.'));
 }
 else {
-  echo "No vote was cast. That's no good. That's no good at all.";
+ echo json_encode(array('status' => '0', 'message' => "No vote was cast. That's no good. That's no good at all."));
 }
 
-mysqli_stmt_close($stmt);
-mysqli_close($link);
+$db = null;
 
-?></i></font>
-<br /><br />
-Thanks for your support of PechaKucha Night Raleigh.
+function checkForVote($email=null, $db=null) {
+  if ($db == null || $email == null) {
+    return false;
+  }
+
+  $stmt = $db->prepare('SELECT `email` FROM `votes` WHERE email = :email');
+
+  $stmt->execute(array(
+    'email' => $email
+  ));
+
+  if ($stmt->rowCount() > 0) {
+    echo json_encode(array('status' => '-1', 'message' => 'You have already voted! Thanks so much! :)'));
+    exit;
+  }
+}
+
+?>

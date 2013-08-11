@@ -1,112 +1,74 @@
-<!doctype html>
-<html>
- <head>
-  <title>Voting!</title>
-  <script src="jquery-1.5.1.min.js"></script>
-  <script src="jquery-ui-1.8.14.custom.min.js"></script>
-  <script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-$(function() {
-  $("ul").sortable({
-    connectWith: "ul",
-    placeholder: "placeholder"
-  });
-  $("ul").disableSelection();
-});
-  </script>
-  <style>
-ul {
-  list-style-type: none;
-  padding: 20px;
-  border-radius: 3px;
-  border: 1px solid #ddd;
-  background: #eee;
-  line-height: 40px;
-}
-ul li.ui-sortable-helper {
-  line-height: 18px;
-}
-ul li {
-  cursor: move;
-  white-space: no-wrap;  
-  display: inline;
-  margin-right: 5px;
-  padding: 5px;
-  width: 120px;
-  border: 1px solid #6699ff;
-  border-radius: 5px;
-  background: #e0ebff;
-  color: #141f33;
-}
-ul li.placeholder {
-/*
-  border: 1px solid #d3d3d3;
-  background: #e6e6e6;
-  color: #555555;
-*/
-  display: none;
-}
-  </style>
- </head>
+    <title>PKN Raleigh SPARKcon Voting</title>
 
-<body>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
-<h1>PKN Preference Voting</h1>
-
-<form action="submit.php" method="post">
-
-<div style="background-color: #ffbfbf; padding: 10px; border: 1px solid #ff8f8f; border-radius: 15px;">
-Email (for security): 
-<input type="text" name="email" />
-</div>
-
-<p><i>Drag the people into the bins to vote. You can pick many people for each bin.</i></p>
-
-<p><b><a target="_blank" href="http://pknraleigh.com/talent/admin">View Submissions Here</a></b>, username: admin, password: pknraleigh123*</p>
-
-<h2>Love It!</h2>
-<ul id="primary">
-</ul>
-
-<h2>Like it</h2>
-<ul id="secondary">
- <li id="A">Sai</li>
- <li id="B">Art&nbsp;Mealer</li>
- <li id="C">Beth&nbsp;Palmer</li>
- <li id="D">Claudine&nbsp;Caro</li>
- <li id="E">Daniel&nbsp;Rothra</li>
- <li id="F">Leslie&nbsp;Flowers</li>
- <li id="G">George&nbsp;Smart</li>
- <li id="H">Shana&nbsp;Garr</li>
- <li id="I">John&nbsp;Gordon</li>
- <li id="J">Karen&nbsp;Jasmine</li>
- <li id="K">Lee&nbsp;Anne&nbsp;McClymont</li>
- <li id="L">Mital&nbsp;Patel</li>
- <li id="M">Kent&nbsp;Meiswinkel</li>
- <li id="N">Donald&nbsp;McMillan</li>
- <li id="O">Robert&nbsp;Mooney</li>
- <li id="P">Crash&nbsp;Gregg</li>
-</ul>
-
-<h2>Indifferent</h2>
-<ul id="tertiary">
-</ul>
-
- <input type="hidden" name="primary" value="" />
- <input type="hidden" name="secondary" value="" />
- <input type="hidden" name="tertiary" value="" />
- <script>
-function serialize() {
- $('input[name=primary]').val($('#primary').sortable('toArray').toString().replace(/,/g,''));
- $('input[name=secondary]').val($('#secondary').sortable('toArray').toString().replace(/,/g,''));
- $('input[name=tertiary]').val($('#tertiary').sortable('toArray').toString().replace(/,/g,''));
-}
- </script>
- <center>
-   <input type="submit" style="padding: 20px; width: 90%; font-size: xx-large" onclick="serialize()" />
- </center>
-</form>
-
-</body>
-
+    <!-- Custom styles for this template -->
+    <link href="css/voting.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-narrow">
+      <div class="header">
+        <!--ul class="nav nav-pills pull-right">
+          <li><a href="#" id="flush">Flush</a></li>
+        </ul-->
+        <h3 class="text-muted">PKN Raleigh SPARKcon Voting</h3>
+      </div>
+      <div id="instructions">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Please Read Before Voting</h3>
+          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+      <div id="talent"><h4>Loading...</h4></div>
+      <!-- <hr /> -->
+        <div id="emailContainer">
+          <label class="control-label" for="email"></label>
+          <input type="email" id="email" class="form-control" placeholder="Email (for security)" />
+          <button type="submit" id="voteButton" class="btn btn-default pull-right">Vote!</button>
+        </div>
+      <div class="footer">
+        <p>Made with <3 by <a href="http://twitter.com/joshmbrown">joshmbrown</a> & <a href="http://philihp.com">philihp</a>.</p>
+      </div>
+    </div> <!-- /container -->
+    <script id="talentPanelTemplate" type="text/template">
+      {{#talent}}
+        <div id="talent-{{ id }}" data-id="{{ id }}" class="talent panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ name }} - {{ title }}</h3>
+          </div>
+          <p>{{ summary }}</p>
+          <div>
+          {{#presentedBefore}}<strong>Please Note: This person has presented at a previous event.</strong>{{/presentedBefore}}
+          {{^presentedBefore}}{{/presentedBefore}}
+          {{#duplicateTalks}} <strong>Please Note: This person has presented the same talk before.</strong>{{/duplicateTalks}}
+          {{^duplicateTalks}}{{/duplicateTalks}}</div>
+          <div>
+          <a href="#" data-id="{{ id }}" class="loveit btn btn-success">Love It!</a>&nbsp;
+          <a href="#" data-id="{{ id }}" class="likeit btn btn-info">Like It!</a>&nbsp;
+          <a href="#" data-id="{{ id }}" class="indifferent btn btn-default">Indifferent</a>
+          </div>
+        </div>
+      {{/talent}}
+    </script>
+    <script src="js/voting.min.js"></script>
+    <!--script src="js/json2.js"></script>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jstorage.js"></script>
+    <script src="js/jquery.mustache.js"></script>
+    <script src="js/voting.js"></script-->
+  </body>
 </html>
