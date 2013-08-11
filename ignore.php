@@ -1,17 +1,19 @@
 <?php
 
-$link = mysqli_connect('localhost','philihp','philihp1','philihp');
+require 'config.inc.php';
 
-$stmt = mysqli_prepare($link, 'UPDATE `pkn10_votes` SET `ignored`="Y" WHERE `pkn_vote_id`=?');
+$db = db();
 
-mysqli_stmt_bind_param($stmt,"d",
-   $_POST['pkn_vote_id']);
+$ignored = (isset($_POST['unignore']) && !empty($_POST['unignore']))? NULL : 'Y';
 
-mysqli_stmt_execute($stmt);
+$stmt = $db->prepare('UPDATE `votes` SET `ignored`=:ignored WHERE `id`=:id');
+$stmt->execute(array(
+  'id' => $_POST['id'],
+  'ignored' => $ignored
+));
+
+$db = null;
 
 header("Location: winners.php");
-
-mysqli_stmt_close($stmt);
-mysqli_close($link);
 
 ?>

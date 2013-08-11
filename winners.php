@@ -1,77 +1,43 @@
 <html>
 <head>
   <style>
-form {
-  margin: 0px;
-}
-.str {
-  background-color: #8e8aff;
-}
-.str1 {
-  background-color: #978af5;
-}
-.str2 {
-  background-color: #a18aec;
-}
-.str3 {
-  background-color: #aa8ae2;
-}
-.str4 {
-  background-color: #b48ad8;
-}
-.str5 {
-  background-color: #bd8ace;
-}
-.str6 {
-  background-color: #c68ac5;
-}
-.str7 {
-  background-color: #d08abb;
-}
-.str8 {
-  background-color: #d98ab1;
-}
-.str9 {
-  background-color: #e38aa7;
-}
-.str10 {
-  background-color: #ec8a9e;
-}
-.str11 {
-  background-color: #f68a94;
-}
-.str12 {
-  background-color: #ff8a8a;
-}
-tr.ignored td {
-  color: #7f7f7f;
-}
+    form {margin:0px;}
+    tr.ignored td {color:#7f7f7f;}
   </style>
+  <title>Winners</title>
 </head>
 <body>
 <?php
 
+error_reporting(0);
+
+require 'config.inc.php';
+
 function idToName($id) {
   switch($id) {
-    case 'A'  : return 'Sai';
-    case 'B'  : return 'Art Mealer';
-    case 'C'  : return 'Beth Palmer';
-    case 'D'  : return 'Claudine Caro';
-    case 'E'  : return 'Daniel Rothra';
-    case 'F'  : return 'Leslie Flowers';
-    case 'G'  : return 'George Smart';
-    case 'H'  : return 'Shana Garr';
-    case 'I'  : return 'John Gordon';
-    case 'J'  : return 'Karen Jasmine';
-    case 'K'  : return 'Lee Anne McClymont';
-    case 'L'  : return 'Mital Patel';
-    case 'M'  : return 'Kent Meiswinkel';
-    case 'N'  : return 'Donald McMillan';
-    case 'O'  : return 'Robert Mooney';
-    case 'P'  : return 'Crash Gregg';
+    case 'A' : return 'Heather Leah';
+    case 'B' : return 'Kyle Berner';
+    case 'C' : return 'Kristen Baumlier';
+    case 'D' : return 'Jason Hibbets';
+    case 'E' : return 'David Matthew Parker';
+    case 'F' : return 'Geoffrey Neal';
+    case 'G' : return 'Todd Delk';
+    case 'H' : return 'John Lowe';
+    case 'I' : return 'Mike Zhu';
+    case 'J' : return 'George Smart';
+    case 'K' : return 'Jamie Katz';
+    case 'L' : return 'Michiel Doorn';
+    case 'M' : return 'Nathan Blaker';
+    case 'N' : return 'Maria Droujkova';
+    case 'O' : return 'Teri Saylor';
+    case 'P' : return 'Sidd Chopra';
+    case 'Q' : return 'Geoffrey Neal';
+    case 'R' : return 'Katie Connors';
+    case 'S' : return 'Alex Glenn';
+    case 'T' : return 'Brittany Iery & Susannah Brinkley';
     default  : return 'ERROR';
   }
-} 
+}
 
 
 function process($votes,$pri,$sec,$ter) {
@@ -91,62 +57,47 @@ function process($votes,$pri,$sec,$ter) {
   }
 }
 
+$db = db();
 
-$link = mysqli_connect('localhost','philihp','philihp1','philihp');
-
-$result = mysqli_query($link,"SELECT * FROM `pkn10_votes` ORDER BY email, time");
+$stmt = $db->query('SELECT * FROM `votes` ORDER BY email, time');
 
 echo "<h2>Actual Votes</h2>";
 echo "<table border=1 cellspacing=0 cellpadding=3>";
-echo "<tr><th>Email</th><th>IP</th><th>Timestamp</th><th>Primary</th><th>Secondary</th><th>Tertiary</th><th colspan=2>Push Butan</th></tr>";
-while($row = mysqli_fetch_assoc($result)) {
+echo "<tr><th>Email</th><th>Timestamp</th><th colspan=2>Push Butan</th></tr>";
+while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   if($row['ignored'] != 'Y') {
     process($votes,$row['primary'],$row['secondary'],$row['tertiary']);
     echo "<tr>";
+    $ignored = null;
+    $unignore = 'disabled';
   }
   else {
     echo "<tr class=\"ignored\">";
+    $ignored = 'disabled';
+    $unignore = null;
   }
-  echo "<td>{$row[email]}</td><td>{$row[ip]}</td><td>{$row[time]}</td><td>{$row[primary]}</td><td>{$row[secondary]}</td><td>{$row[tertiary]}</td>";
+  echo "<td>{$row['email']}</td><td>{$row['time']}</td>";
   echo "<td>";
   echo " <form action=\"ignore.php\" method=\"post\">";
-  echo "  <input type=\"hidden\" name=\"pkn_vote_id\" value=\"{$row[pkn_vote_id]}\"/>";
-  echo "  <input type=\"submit\" value=\"Ignore\"/>";
+  echo "  <input type=\"hidden\" name=\"id\" value=\"{$row['id']}\"/>";
+  echo "  <input type=\"submit\" {$ignored} value=\"Ignore\"/>";
   echo " </form>";
   echo "</td>";
   echo "<td>";
-  echo " <form action=\"unignore.php\" method=\"post\">";
-  echo "  <input type=\"hidden\" name=\"pkn_vote_id\" value=\"{$row[pkn_vote_id]}\"/>";
-  echo "  <input type=\"submit\" value=\"Unignore\"/>";
+  echo " <form action=\"ignore.php\" method=\"post\">";
+  echo "  <input type=\"hidden\" name=\"id\" value=\"{$row[id]}\"/>";
+  echo "  <input type=\"hidden\" name=\"unignore\" value=\"true\"/>";
+  echo "  <input type=\"submit\" {$unignore} value=\"Unignore\"/>";
   echo " </form>";
   echo "</td>";
   echo "</tr>";
 }
 echo "</table>";
 
-mysqli_free_result($result);
-mysqli_close($link);
+$db = null;
 
-echo "<h2>Pairwise Defeat Matrix</h2>";
-echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\"><thead><tr>";
-echo "<th>D</th>";
-for($c='A';$c<='P';$c++) {
-  echo "<th>[*,{$c}]</th>";
-}
-echo "</tr></thead>";
-echo "<tbody>";
-for($c='A';$c<='P';$c++) {
-  echo "<tr><th>[{$c},*]</th>";
-  for($d='A';$d<='P';$d++) {
-    if($c==$d) $votes[$c][$d]=0;
-    echo "<td class=\"str",$votes[$c][$d],"\">",$votes[$c][$d],"</td>";
-  }
-  echo "</tr>";
-}
-echo "</tbody></table>";
-
-for($i='A';$i<='P';$i++) {
-  for($j='A';$j<='P';$j++) {
+for($i='A';$i<='T';$i++) {
+  for($j='A';$j<='T';$j++) {
     if($i!=$j) {
       $strength[$i][$j] = $votes[$i][$j];
     }
@@ -155,10 +106,10 @@ for($i='A';$i<='P';$i++) {
     }
   }
 }
-for($i='A';$i<='P';$i++) {
-  for($j='A';$j<='P';$j++) {
+for($i='A';$i<='T';$i++) {
+  for($j='A';$j<='T';$j++) {
     if($i!=$j) {
-      for($k='A';$k<='P';$k++) {
+      for($k='A';$k<='T';$k++) {
         if($i!=$k & $j!=$k) {
           $strength[$j][$k] = max($strength[$j][$k], min($strength[$j][$i],$strength[$i][$k]));
         }
@@ -167,62 +118,39 @@ for($i='A';$i<='P';$i++) {
   }
 }
 
-echo "<h2>Strengths of strongest paths</h2>";
-echo "<table border=1 cellspacing=0 cellpadding=3><thead><tr>";
-echo "<th>P</th>";
-for($c='A';$c<='P';$c++) {
-  echo "<th>[*,{$c}]</th>";
-}
-echo "</tr></thead><tbody>";
-for($c='A';$c<='P';$c++) {
-  echo "<tr><th>[{$c},*]</th>";
-  for($d='A';$d<='P';$d++) {
-    echo "<td class=\"str",$strength[$c][$d],"\">",$strength[$c][$d],"</td>";
-  }
-  echo "</tr>";
-}
-echo "</table>";
-
 echo "<h2>Ranking of Winners from Most Preferential to Least</h2>";
 # calculation of the binary relation O and the winners
 
-for($i='A';$i<='P';$i++) {
+for($i='A';$i<='T';$i++) {
   $possible[$i] = 1;
-}  
+}
 
 $rank = Array();
 $rank_i = 0;
-echo "<ol>";
 do {
-  echo "<li>";
   $rank[++$rank_i] = '';
-  for($i='A';$i<='P';$i++) {
+  for($i='A';$i<='T';$i++) {
     if($possible[$i] == 0) continue;
     $winner = 1;
-    for($j='A';$j<='P';$j++) {
+    for($j='A';$j<='T';$j++) {
       if($possible[$j] == 0) continue;
       if($i!=$j) {
         if($strength[$j][$i] > $strength[$i][$j]) {
-          $winner = 0; 
+          $winner = 0;
         }
       }
     }
     if($winner == 1) {
       $possible[$i] = 0;
       $rank[$rank_i] .= $i;
-      echo $i;
     }
   }
 
   $done = true;
-  for($i='A';$i<='P';$i++) {
+  for($i='A';$i<='T';$i++) {
     if($possible[$i] == 1) $done = false;
   }
-  echo "</li>";
 } while($done == false);
-echo "</ol>";
-
-echo "<i>...or...</i>";
 
 echo "<ol>";
 for($i=1;$i<=$rank_i;$i++) {
