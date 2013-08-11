@@ -1,6 +1,7 @@
 var buttonSetup, voteItUp, hideElements, validateEmail;
 
-var votes = {
+var version = '3',
+    votes = {
       "email": "",
       "primary": "",
       "secondary": "",
@@ -28,7 +29,7 @@ $(function(){
     return false;
   }
   else {
-    $.getJSON("data/talent.json", function(data) {
+    $.getJSON("data/talent.json?v="+version, function(data) {
       output.html($.mustache(template, data));
       buttonSetup();
     });
