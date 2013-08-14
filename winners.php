@@ -15,26 +15,26 @@ require 'config.inc.php';
 
 function idToName($id) {
   switch($id) {
-    case 'A' : return 'Heather Leah';
-    case 'B' : return 'Kyle Berner';
-    case 'C' : return 'Kristen Baumlier';
-    case 'D' : return 'Jason Hibbets';
-    case 'E' : return 'David Matthew Parker';
-    case 'F' : return 'Geoffrey Neal';
-    case 'G' : return 'Todd Delk';
-    case 'H' : return 'John Lowe';
-    case 'I' : return 'Mike Zhu';
-    case 'J' : return 'George Smart';
-    case 'K' : return 'Jamie Katz';
-    case 'L' : return 'Michiel Doorn';
-    case 'M' : return 'Nathan Blaker';
-    case 'N' : return 'Maria Droujkova';
-    case 'O' : return 'Teri Saylor';
-    case 'P' : return 'Sidd Chopra';
-    case 'Q' : return 'Geoffrey Neal';
-    case 'R' : return 'Katie Connors';
-    case 'S' : return 'Alex Glenn';
-    case 'T' : return 'Brittany Iery & Susannah Brinkley';
+    case 'A' : return 'Heather Leah - <strong>What\'s It Like Being a Superhero?</strong>';
+    case 'B' : return 'Kyle Berner - <strong>The Evolution of the One-for-One Business Model</strong>';
+    case 'C' : return 'Kristen Baumlier - <strong>Food Font: Why not play and write with food?</strong>';
+    case 'D' : return 'Jason Hibbets - <strong>Open source beyond technology</strong>';
+    case 'E' : return 'David Matthew Parker - <strong>Data Driven Art, or Making Anal-Retentiveness Work for Me</strong>';
+    case 'F' : return 'Geoffrey Neal - <strong>subtext</strong>';
+    case 'G' : return 'Todd Delk - <strong>How the Great Recession Drastically Improved One Guy\'s Life</strong>';
+    case 'H' : return 'John Lowe - <strong>The Art of Conversation in a Technology Culture</strong>';
+    case 'I' : return 'Mike Zhu - <strong>An Amazing Cup: 3rd Wave Coffee and Why the Barista Matters</strong>';
+    case 'J' : return 'George Smart - <strong>Mayberry Modernism: How the Triangle Became Famous Before Clay Aiken</strong>';
+    case 'K' : return 'Jamie Katz - <strong>Enthusiasm, Community, and Synergy: The Road to World of Bluegrass in Raleigh</strong>';
+    case 'L' : return 'Michiel Doorn - <strong>Process innovation for complex sustainable development projects</strong>';
+    case 'M' : return 'Nathan Blaker - <strong>Operation: New Directions</strong>';
+    case 'N' : return 'Maria Droujkova - <strong>Big problems, small math?</strong>';
+    case 'O' : return 'Teri Saylor - <strong>We the People</strong>';
+    case 'P' : return 'Sidd Chopra - <strong>The War Against Our Kids</strong>';
+    case 'Q' : return 'Geoffrey Neal - <strong>song to sylvia</strong>';
+    case 'R' : return 'Katie Connors - <strong>Cultural Influence on Religion</strong>';
+    case 'S' : return 'Alex Glenn - <strong>Trust the Gut? AG\'s Believe It or Not!</strong>';
+    case 'T' : return 'Brittany Iery & Susannah Brinkley - <strong>RDU Baton: Building a Community through Pictures</strong>';
     default  : return 'ERROR';
   }
 }
@@ -152,16 +152,16 @@ do {
   }
 } while($done == false);
 
-echo "<ol>";
+echo "<ul>";
 for($i=1;$i<=$rank_i;$i++) {
   echo "<li>";
   for($j=0;$j<strlen($rank[$i]);$j++) {
-    if($j>0) echo ", ";
+    if($j>0) echo "</li><li>";
     echo idToName($rank[$i][$j]);
   }
   echo "</li>";
 }
-echo "</ol>";
+echo "</ul>";
 ?>
 </body>
 </html>
